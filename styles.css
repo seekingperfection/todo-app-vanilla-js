@@ -1,0 +1,144 @@
+body {
+    overflow: hidden;
+}
+.container {
+    width: 80%;
+    box-sizing: border-box;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    flex-flow: column;
+    -webkit-box-shadow: 0px 0px 4px 1px rgba(255,255,255,0.2);
+    box-shadow: 0px 0px 4px 1px rgba(255,255,255,0.2);
+}
+
+.title {
+    font-weight: 200;
+    font-size: 25px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding: 0 26px;
+}
+
+.subTitle {
+    font-weight: 200;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.subContainer {
+    box-sizing: border-box;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+}
+
+input {
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    background: unset;
+    outline: none;
+    text-align: center;
+    padding: 5px;
+    color: #ffffff;
+    font-weight: 200;
+    font-size: 14px;
+}
+
+.subContainer ::placeholder {
+    font-weight: 200;
+    font-size: 14px;
+    color: rgba(255,255,255,0.2);
+}
+
+button {
+    background: none;
+    color: #ffffff;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+button:hover {
+    border: 1px solid rgba(255,255,255,0.5);
+}
+
+/*.subContainer .error-message {*/
+/*    font-size: 12px;*/
+/*    font-weight: 200;*/
+/*    display: none;*/
+/*}*/
+
+.error-message {
+    font-size: 12px;
+    font-weight: 200;
+    text-align: center;
+}
+
+.todo {
+    box-sizing: border-box;
+    height: 60px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.todo i {
+    color: rgba(255,255,255,0.2);
+}
+
+.todo i:hover {
+    color: rgba(255,255,255,1);
+}
+
+.todos-list .todo:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.default-message {
+    font-weight: 200;
+    text-transform: uppercase;
+}
+
+.testing {
+    background-color: red;
+}
+
+.modal-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: rgba(28, 28, 28,0.85);
+    /*background-color: rgba(0,0,0,0.6);*/
+}
+
+.modal-title {
+    font-size: 16px;
+}
+
+.modal {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    width: 350px;
+    height: 400px;
+    box-sizing: border-box;
+    background-color: rgb(28,28,28);
+    border-radius: 8px;
+    padding: 0 50px;
+    box-shadow: 0px 0px 4px 1px rgba(255,255,255,0.2);
+}
+
+.modal-current-todo {
+    font-size: 12px;
+    font-weight: 200;
+}
+
+.modal-input {
+    width: 100%;
+}
