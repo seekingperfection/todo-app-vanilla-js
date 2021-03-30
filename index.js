@@ -1,5 +1,3 @@
-// import './SmoothLib.css';
-
 const state =  {
     list: []
 }
@@ -11,7 +9,6 @@ const valueFromInput = document.getElementById('enter-item-title');
 valueFromInput.addEventListener('keyup', function(event) {
     if (event.key === 'Enter') {
         addNewTodoItem(getValueFromInput());
-        // render();
     }
 });
 
@@ -22,7 +19,6 @@ function errorMessage(value) {
     errorMessage.id = 'error-msg';
     errorMessage.textContent = value;
     errorBox.appendChild(errorMessage);
-    // todos.appendChild(error);
 }
 
 function defaultMessage(value) {
@@ -31,10 +27,10 @@ function defaultMessage(value) {
     defaultMessage.id = 'default-msg';
     defaultMessage.classList.add('default-message', 'mb-10');
     defaultMessage.textContent = value;
-    defaultBox.appendChild(defaultMessage);
+    if (defaultBox.children.length < 2) {
+        defaultBox.appendChild(defaultMessage);
+    }
 }
-
-// defaultMessage('Nothing to show');
 
 function getValueFromInput() {
     let inputValue = valueFromInput.value;
@@ -53,7 +49,6 @@ function checkIfDuplicates(value) {
 }
 
 function addNewTodoItem(value) {
-    const app = document.getElementById('app');
     const err = document.getElementById('error-msg');
     console.log(checkIfDuplicates(value), ' tikriname');
     if (value.length >= 6 && !checkIfDuplicates(value)) {
@@ -71,11 +66,9 @@ function appendListItem(div, title, remove, edit) {
     const todo = document.createElement('div');
     const iconRemove = document.createElement('i');
     const iconEdit = document.createElement('i');
-    const iconCheck = document.createElement('i');
     const iconBox = document.createElement('div');
 
     iconBox.classList.add('d-flex', 'f-row');
-    // iconBox.appendChild(iconEdit,iconRemove);
     iconBox.appendChild(iconEdit);
     iconBox.appendChild(iconRemove);
 
@@ -99,9 +92,6 @@ function removeListItem(value) {
     render();
 }
 
-
-//Negrazina titlo nx
-
 function returnEditedTitle() {
     const editedInput = document.getElementById('editInput');
     const placeholder = editedInput.getAttribute('placeholder');
@@ -116,9 +106,7 @@ function saveEditedTitle(editedTitle, titleFromArr) {
             el.title = editedTitle;
         }
     })
-    // console.log(state.list);
     render();
-
 }
 
 function detectModalOutsideClickIfTrueRemove() {
@@ -134,9 +122,6 @@ function editTitle(title) {
     const app = document.getElementById('app');
     console.log('swx swx swx')
     let modalElement = document.createElement('div');
-    const test = document.getElementById('test');
-    // let x = title;
-    // test.addEventListener('click', returnEditedTitle);
 
     modalElement.innerHTML = `
         <div class="position-absolute modal-container" id="modal">
@@ -151,27 +136,16 @@ function editTitle(title) {
     app.appendChild(modalElement);
     setTimeout(detectModalOutsideClickIfTrueRemove, 200);
 }
-//
-// function testin() {
-//     console.log('asdfasdf')
-// }
-// callModal();
 
 function openModal(value) {
-    const isModal = document.getElementById('modal');
-    const app = document.getElementById('app');
-
     state.list.filter((el, index) => {
         if (value === index) {
-            // console.log(el.title, 'martnui tailtl;as')
             editTitle(el.title);
         }
     });
-    // render();
 }
 
 function generateList(div, list) {
-    // console.log(list);
     list.forEach((divTextContent, divItemIndex) => {
         appendListItem(div, divTextContent.title, () => removeListItem(divItemIndex), () => openModal(divItemIndex))
     })
@@ -195,7 +169,7 @@ function render() {
 
     const defaultMsg = document.getElementById('default-msg');
     if ( state.list.length === 0 ) {
-        defaultMessage(`Currently there aren't any todos`)
+        defaultMessage(`Currently there aren't any todos`);
     } else if (defaultMsg) {
         defaultMsg.remove();
     }
