@@ -62,15 +62,24 @@ function addNewTodoItem(value) {
     render();
 }
 
-function appendListItem(div, title, remove, edit) {
+
+
+
+function appendListItem(div, title, remove, edit, checkmark) {
     const todo = document.createElement('div');
     const iconRemove = document.createElement('i');
     const iconEdit = document.createElement('i');
+    const iconCheckmark = document.createElement('i');
     const iconBox = document.createElement('div');
 
+
     iconBox.classList.add('d-flex', 'f-row');
+    iconBox.appendChild(iconCheckmark);
     iconBox.appendChild(iconEdit);
     iconBox.appendChild(iconRemove);
+
+    iconCheckmark.classList.add('fas', 'fa-check', 'pointer', 'mr-10');
+    iconCheckmark.onclick = checkmark;
 
     iconEdit.classList.add('far', 'fa-edit', 'pointer');
     iconEdit.onclick = edit;
@@ -145,9 +154,19 @@ function openModal(value) {
     });
 }
 
+function toggleStatus(obj) {
+    return obj.status = !obj.status;
+}
+
+function checkmark(obj) {
+    toggleStatus(obj);
+    render();
+}
+
+
 function generateList(div, list) {
     list.forEach((divTextContent, divItemIndex) => {
-        appendListItem(div, divTextContent.title, () => removeListItem(divItemIndex), () => openModal(divItemIndex))
+        appendListItem(div, divTextContent.title, () => removeListItem(divItemIndex), () => openModal(divItemIndex), () => checkmark(divTextContent, divItemIndex))
     })
 }
 
@@ -173,8 +192,9 @@ function render() {
     } else if (defaultMsg) {
         defaultMsg.remove();
     }
-}
+    console.log(state.list);
 
+}
 
 render();
 

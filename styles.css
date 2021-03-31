@@ -53,6 +53,10 @@ input {
     color: rgba(255,255,255,0.2);
 }
 
+.set-checkmark {
+    color: #1eb562 !important;
+}
+
 button {
     background: none;
     color: #ffffff;
