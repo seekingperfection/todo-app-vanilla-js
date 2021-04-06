@@ -42,7 +42,6 @@ function getValueFromInput() {
 }
 
 function checkIfDuplicates(value) {
-    console.log('pacallinta?');
     return state.list.filter(function (el) {
         return (el.title === value);
     }).length > 0;
@@ -50,9 +49,8 @@ function checkIfDuplicates(value) {
 
 function addNewTodoItem(value) {
     const err = document.getElementById('error-msg');
-    console.log(checkIfDuplicates(value), ' tikriname');
     if (value.length >= 6 && !checkIfDuplicates(value)) {
-        state.list.push({title: value, status: false});
+        state.list.push({title: value, isDone: false, created_at: getTodaysDate(), status: 'Created - '});
         if (err) {
             err.remove();
         }
@@ -64,15 +62,29 @@ function addNewTodoItem(value) {
 
 
 
+function getTodaysDate() {
+    let today = new Date();
+    return today.toLocaleString();
+}
 
-function appendListItem(div, title, remove, edit, checkmark) {
+
+function appendListItem(div, title, remove, edit, checkmark, date, status) {
     const todo = document.createElement('div');
     const iconRemove = document.createElement('i');
     const iconEdit = document.createElement('i');
     const iconCheckmark = document.createElement('i');
     const iconBox = document.createElement('div');
+    const dateElement = document.createElement('span');
+    const createdAt = document.createElement('div');
 
 
+    dateElement.classList.add('time');
+    dateElement.textContent = date;
+    createdAt.classList.add('date');
+    createdAt.textContent = status;
+    createdAt.appendChild(dateElement);
+    // const getDate = date;
+    // console.log(date, ' cioa yra data ereli jibanas');
     iconBox.classList.add('d-flex', 'f-row');
     iconBox.appendChild(iconCheckmark);
     iconBox.appendChild(iconEdit);
@@ -87,9 +99,10 @@ function appendListItem(div, title, remove, edit, checkmark) {
     iconRemove.classList.add('far', 'fa-trash-alt', 'pointer', 'ml-10');
     iconRemove.onclick = remove;
 
-    todo.classList.add('todo', 'w-100', 'd-flex', 'f-a-center', 'f-j-between');
+    todo.classList.add('todo', 'position-relative', 'w-100', 'd-flex', 'f-a-center', 'f-j-between');
     todo.textContent = title;
 
+    todo.appendChild(createdAt);
     div.appendChild(todo);
     todo.appendChild(iconBox);
 }
@@ -113,6 +126,8 @@ function saveEditedTitle(editedTitle, titleFromArr) {
     state.list.map(el => {
         if (el.title === titleFromArr) {
             el.title = editedTitle;
+            el.status = 'Edited - ';
+            el.created_at = getTodaysDate();
         }
     })
     render();
@@ -129,7 +144,6 @@ function detectModalOutsideClickIfTrueRemove() {
 
 function editTitle(title) {
     const app = document.getElementById('app');
-    console.log('swx swx swx')
     let modalElement = document.createElement('div');
 
     modalElement.innerHTML = `
@@ -155,7 +169,7 @@ function openModal(value) {
 }
 
 function toggleStatus(obj) {
-    return obj.status = !obj.status;
+    return obj.isDone = !obj.isDone;
 }
 
 function checkmark(obj) {
@@ -165,9 +179,17 @@ function checkmark(obj) {
 
 
 function generateList(div, list) {
-    list.forEach((divTextContent, divItemIndex) => {
-        appendListItem(div, divTextContent.title, () => removeListItem(divItemIndex), () => openModal(divItemIndex), () => checkmark(divTextContent, divItemIndex))
+    list.forEach((el, divItemIndex) => {
+        appendListItem(
+            div,
+            el.title,
+            () => removeListItem(divItemIndex),
+            () => openModal(divItemIndex),
+            () => checkmark(el, divItemIndex),
+            el.created_at,
+            el.status)
     })
+    console.log(list, 'list');
 }
 
 function render() {
@@ -192,8 +214,6 @@ function render() {
     } else if (defaultMsg) {
         defaultMsg.remove();
     }
-    console.log(state.list);
-
 }
 
 render();
