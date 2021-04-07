@@ -121,7 +121,7 @@ function removeListItem(value) {
     render();
 }
 
-function returnEditedTitle() {
+function getEditedTitle() {
     const editedInput = document.getElementById('editInput');
     const placeholder = editedInput.getAttribute('placeholder');
 
@@ -211,7 +211,7 @@ function editTitle(title) {
                     <input type="text" id="editInput" class="mb-5 modal-input" placeholder="${title}">
                     Your current todo
                 </div>
-                <button class="btn" id="saveEditedVal" onclick="returnEditedTitle()">Save</button>
+                <button class="btn" id="saveEditedVal" onclick="getEditedTitle()">Save</button>
             </div>
         </div>
 `
