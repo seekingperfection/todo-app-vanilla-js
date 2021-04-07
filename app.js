@@ -1,6 +1,7 @@
 const state =  {
-    list: []
+    list: JSON.parse(localStorage.getItem('todos')) || []
 }
+//isideti i local storage
 
 const todos = document.getElementById('todos');
 const valueFromInput = document.getElementById('enter-item-title');
@@ -41,15 +42,16 @@ function getValueFromInput() {
     return resetInputValue;
 }
 
-function checkIfDuplicates(value) {
-    return state.list.filter(el => {
-        return (el.title === value);
-    }).length > 0;
-}
+// function checkIfDuplicates(value) {
+//     return state.list.filter(el => {
+//         return (el.title === value);
+//     }).length > 0;
+// }
 
 function addNewTodoItem(value) {
     const err = document.getElementById('error-msg');
-    if (value.length >= 6 && !checkIfDuplicates(value)) {
+    let tes = getErrorMessage(value);
+    if (!tes) {
         state.list.push(
             {   title: value,
                 isDone: false,
@@ -130,64 +132,33 @@ function getEditedTitle() {
 
 function saveEditedTitle(editedTitle, titleFromArr) {
     const removeModal = document.getElementById('modal');
-    // const modalContent = document.getElementById('modalContent');
-
-
-    const err = document.createElement('div');
-    state.list.map(el => {
-       // modalContent.appendChild(err);
-       //
-       //  if (editedTitle.length < 6) {
-       //      err.textContent = 'Minimum 6 characters is required';
-       //      modalContent.appendChild(err);
-       //  } else if ( el.title === editedTitle ) {
-       //      err.textContent = 'This todo already exists';
-       //      modalContent.appendChild(err);
-       //  } else {
-       //  if (el.title === titleFromArr) {
-       //      el.title = editedTitle;
-       //      el.status = 'Edited - ';
-       //      el.created_at = getTodaysDate();
-       //      removeModal.remove();
-       //      render();
-       //  }
-        if (editedTitle.length < 6) {
-            console.log('way tooo short');
-            console.log(el);
-        } else if (editedTitle) {
-            let x = [];
-            x.push(el.title);
-            if (x.find(title => title === editedTitle)) {
-                console.log(x, 'asdf')
-            } else {
-                console.log('testtest')
+    let test = getErrorMessage(editedTitle);
+    if (!test) {
+        state.list.map(el => {
+            if (el.title === titleFromArr) {
+                el.title = editedTitle;
+                el.status = 'Edited - ';
+                el.created_at = getTodaysDate();
+                removeModal.remove();
             }
-        }
+        })
+        render();
+    } else {
+        console.log(test);
+    }
 
+    // susikrauti i viena atyskira funkcija
+}
 
-
-
-
-
-        // } else if ( el.title === editedTitle ) {
-        //     err.textContent = 'This todo already exists';
-        //     modalContent.appendChild(err);
-        //     if (el.title === titleFromArr) {
-        //         el.title = editedTitle;
-        //         el.status = 'Edited - ';
-        //         el.created_at = getTodaysDate();
-        //     }
-        // } else {
-        //     console.log('cbb?')
-
-            // el.title = editedTitle;
-                // el.status = 'Edited - ';
-                // el.created_at = getTodaysDate();
-                // render();
-        // }
-
-    })
-    // render();
+function getErrorMessage(editedTitle) {
+    if (!editedTitle) {
+        return 'asdf';
+    } else if (editedTitle.length < 6) {
+        return 'asdf';
+    } else if (state.list.find(el => el.title === editedTitle)) {
+        return 'asdf';
+    }
+    return '';
 }
 
 function detectModalOutsideClickIfTrueRemove() {
@@ -282,6 +253,8 @@ function render() {
     } else if (defaultMsg) {
         defaultMsg.remove();
     }
+
+    localStorage.setItem('todos', JSON.stringify(state.list));
 }
 
 render();
