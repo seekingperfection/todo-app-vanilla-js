@@ -66,8 +66,12 @@ input {
     color: rgba(255,255,255,0.2);
 }
 
-.set-checkmark {
+.active-checkmark {
     color: #1eb562 !important;
+}
+
+.inactive-checkmark {
+    color: rgba(255,255,255,0.2) !important;
 }
 
 button {
@@ -135,27 +139,33 @@ button:hover {
 
 .modal-title {
     font-size: 16px;
+    font-weight: 200;
+}
+
+.modal-input {
+    box-sizing: border-box;
+    /*margin: 0 !important;*/
+    /*padding: 5px 0 !important;*/
 }
 
 .modal {
     display: flex;
     flex-flow: column;
     align-items: center;
-    justify-content: center;
-    width: 350px;
-    height: 400px;
+    justify-content: space-around;
+    width: 300px;
+    height: 250px;
     box-sizing: border-box;
     background-color: rgb(28,28,28);
     border-radius: 8px;
-    padding: 0 50px;
+    padding: 25px 50px;
     box-shadow: 0px 0px 4px 1px rgba(255,255,255,0.2);
 }
 
 .modal-current-todo {
     font-size: 12px;
     font-weight: 200;
-}
-
-.modal-input {
-    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-flow: column;
 }

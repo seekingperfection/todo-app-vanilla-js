@@ -50,7 +50,16 @@ function checkIfDuplicates(value) {
 function addNewTodoItem(value) {
     const err = document.getElementById('error-msg');
     if (value.length >= 6 && !checkIfDuplicates(value)) {
-        state.list.push({title: value, isDone: false, created_at: getTodaysDate(), status: 'Created - '});
+        state.list.push(
+            {   title: value,
+                isDone: false,
+                created_at: getTodaysDate(),
+                status: 'Created - ',
+                icon_checkmark: {
+                    icon_classes_arr: ['fas','fa-check','pointer','mr-10'],
+                }
+            }
+            );
         if (err) {
             err.remove();
         }
@@ -60,15 +69,12 @@ function addNewTodoItem(value) {
     render();
 }
 
-
-
 function getTodaysDate() {
     let today = new Date();
     return today.toLocaleString();
 }
 
-
-function appendListItem(div, title, remove, edit, checkmark, date, status) {
+function appendListItem(div, title, remove, edit, checkmark, date, status, iconCheckmarkClassesArr) {
     const todo = document.createElement('div');
     const iconRemove = document.createElement('i');
     const iconEdit = document.createElement('i');
@@ -77,20 +83,16 @@ function appendListItem(div, title, remove, edit, checkmark, date, status) {
     const dateElement = document.createElement('span');
     const createdAt = document.createElement('div');
 
-
     dateElement.classList.add('time');
     dateElement.textContent = date;
     createdAt.classList.add('date');
     createdAt.textContent = status;
     createdAt.appendChild(dateElement);
-    // const getDate = date;
-    // console.log(date, ' cioa yra data ereli jibanas');
-    iconBox.classList.add('d-flex', 'f-row');
-    iconBox.appendChild(iconCheckmark);
-    iconBox.appendChild(iconEdit);
-    iconBox.appendChild(iconRemove);
 
-    iconCheckmark.classList.add('fas', 'fa-check', 'pointer', 'mr-10');
+    iconCheckmarkClassesArr.icon_classes_arr.forEach(el => {
+        iconCheckmark.classList.add(el)
+    })
+    iconCheckmark.classList.add()
     iconCheckmark.onclick = checkmark;
 
     iconEdit.classList.add('far', 'fa-edit', 'pointer');
@@ -98,6 +100,11 @@ function appendListItem(div, title, remove, edit, checkmark, date, status) {
 
     iconRemove.classList.add('far', 'fa-trash-alt', 'pointer', 'ml-10');
     iconRemove.onclick = remove;
+
+    iconBox.classList.add('d-flex', 'f-row');
+    iconBox.appendChild(iconCheckmark);
+    iconBox.appendChild(iconEdit);
+    iconBox.appendChild(iconRemove);
 
     todo.classList.add('todo', 'position-relative', 'w-100', 'd-flex', 'f-a-center', 'f-j-between');
     todo.textContent = title;
@@ -149,9 +156,11 @@ function editTitle(title) {
     modalElement.innerHTML = `
         <div class="position-absolute modal-container" id="modal">
             <div class="modal" id="modal">
-                <div class="modal-title title mb-20">EDIT YOUR TODO</div>
-                <div class="modal-current-todo mt-20 mb-10">Your current todo</div>
-                <input type="text" id="editInput" class="mb-20 modal-input" placeholder="${title}">
+                <div class="modal-title">EDIT YOUR TODO</div>
+                <div class="modal-current-todo">
+                    <input type="text" id="editInput" class="mb-5 modal-input" placeholder="${title}">
+                    Your current todo
+                </div>
                 <button class="btn" id="test" onclick="returnEditedTitle()">Save</button>
             </div>
         </div>
@@ -168,12 +177,25 @@ function openModal(value) {
     });
 }
 
-function toggleStatus(obj) {
+function toggleIsDone(obj) {
     return obj.isDone = !obj.isDone;
 }
 
+function setActiveCheckmark(obj) {
+    if ( obj.isDone ) {
+        obj.icon_checkmark.icon_classes_arr.unshift('active-checkmark');
+    } else if ( !obj.isDone ) {
+        obj.icon_checkmark.icon_classes_arr.shift();
+    }
+}
+
 function checkmark(obj) {
-    toggleStatus(obj);
+    state.list.map(el => {
+        if (el.title === obj.title) {
+            toggleIsDone(obj);
+            setActiveCheckmark(obj);
+        }
+    })
     render();
 }
 
@@ -187,9 +209,9 @@ function generateList(div, list) {
             () => openModal(divItemIndex),
             () => checkmark(el, divItemIndex),
             el.created_at,
-            el.status)
+            el.status,
+            el.icon_checkmark)
     })
-    console.log(list, 'list');
 }
 
 function render() {
