@@ -182,11 +182,7 @@ function toggleIsDone(obj) {
 }
 
 function setActiveCheckmark(obj) {
-    if ( obj.isDone ) {
-        obj.icon_checkmark.icon_classes_arr.unshift('active-checkmark');
-    } else if ( !obj.isDone ) {
-        obj.icon_checkmark.icon_classes_arr.shift();
-    }
+    obj.isDone ? obj.icon_checkmark.icon_classes_arr.unshift('active-checkmark') : obj.icon_checkmark.icon_classes_arr.shift();
 }
 
 function checkmark(obj) {
