@@ -42,7 +42,7 @@ function getValueFromInput() {
 }
 
 function checkIfDuplicates(value) {
-    return state.list.filter(function (el) {
+    return state.list.filter(el => {
         return (el.title === value);
     }).length > 0;
 }
@@ -124,20 +124,70 @@ function removeListItem(value) {
 function returnEditedTitle() {
     const editedInput = document.getElementById('editInput');
     const placeholder = editedInput.getAttribute('placeholder');
-    const removeModal = document.getElementById('modal');
+
     saveEditedTitle(editedInput.value, placeholder);
-    removeModal.remove();
 }
 
 function saveEditedTitle(editedTitle, titleFromArr) {
+    const removeModal = document.getElementById('modal');
+    // const modalContent = document.getElementById('modalContent');
+
+
+    const err = document.createElement('div');
     state.list.map(el => {
-        if (el.title === titleFromArr) {
-            el.title = editedTitle;
-            el.status = 'Edited - ';
-            el.created_at = getTodaysDate();
+       // modalContent.appendChild(err);
+       //
+       //  if (editedTitle.length < 6) {
+       //      err.textContent = 'Minimum 6 characters is required';
+       //      modalContent.appendChild(err);
+       //  } else if ( el.title === editedTitle ) {
+       //      err.textContent = 'This todo already exists';
+       //      modalContent.appendChild(err);
+       //  } else {
+       //  if (el.title === titleFromArr) {
+       //      el.title = editedTitle;
+       //      el.status = 'Edited - ';
+       //      el.created_at = getTodaysDate();
+       //      removeModal.remove();
+       //      render();
+       //  }
+        if (editedTitle.length < 6) {
+            console.log('way tooo short');
+            console.log(el);
+        } else if (editedTitle) {
+            let x = [];
+            x.push(el.title);
+            if (x.find(title => title === editedTitle)) {
+                console.log(x, 'asdf')
+            } else {
+                console.log('testtest')
+            }
         }
+
+
+
+
+
+
+        // } else if ( el.title === editedTitle ) {
+        //     err.textContent = 'This todo already exists';
+        //     modalContent.appendChild(err);
+        //     if (el.title === titleFromArr) {
+        //         el.title = editedTitle;
+        //         el.status = 'Edited - ';
+        //         el.created_at = getTodaysDate();
+        //     }
+        // } else {
+        //     console.log('cbb?')
+
+            // el.title = editedTitle;
+                // el.status = 'Edited - ';
+                // el.created_at = getTodaysDate();
+                // render();
+        // }
+
     })
-    render();
+    // render();
 }
 
 function detectModalOutsideClickIfTrueRemove() {
@@ -155,13 +205,13 @@ function editTitle(title) {
 
     modalElement.innerHTML = `
         <div class="position-absolute modal-container" id="modal">
-            <div class="modal" id="modal">
+            <div class="modal" id="modalContent">
                 <div class="modal-title">EDIT YOUR TODO</div>
                 <div class="modal-current-todo">
                     <input type="text" id="editInput" class="mb-5 modal-input" placeholder="${title}">
                     Your current todo
                 </div>
-                <button class="btn" id="test" onclick="returnEditedTitle()">Save</button>
+                <button class="btn" id="saveEditedVal" onclick="returnEditedTitle()">Save</button>
             </div>
         </div>
 `
