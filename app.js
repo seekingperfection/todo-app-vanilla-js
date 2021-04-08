@@ -157,7 +157,7 @@ function displayErrorMessage(err) {
     if (err) {
         setTimeout( () => {
             appBodyAppendsErrorMessageBoxAndAnimates(appBody, errorMessageBox, err)
-        }, 2000);
+        }, 200);
     }
 }
 
@@ -172,7 +172,7 @@ function appBodyAppendsErrorMessageBoxAndAnimates(appBody, errBox, err) {
             errBox.classList.add('animate-err-message-fade-out');
             setTimeout(() => {
                 errBox.remove();
-            }, 1000);
+            }, 500);
         }, 4000)
         ;
     }
