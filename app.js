@@ -42,16 +42,10 @@ function getValueFromInput() {
     return resetInputValue;
 }
 
-// function checkIfDuplicates(value) {
-//     return state.list.filter(el => {
-//         return (el.title === value);
-//     }).length > 0;
-// }
-
 function addNewTodoItem(value) {
-    const err = document.getElementById('error-msg');
-    let tes = getErrorMessage(value);
-    if (!tes) {
+    // const err = document.getElementById('error-msg');
+    let err = getErrorMessage(value);
+    if (!err) {
         state.list.push(
             {   title: value,
                 isDone: false,
@@ -62,11 +56,12 @@ function addNewTodoItem(value) {
                 }
             }
             );
-        if (err) {
-            err.remove();
-        }
-    } else if (!err) {
-        errorMessage('Minimum 6 characters is required');
+        // if (err) {
+        //     err.remove();
+        // }
+    } else  {
+        // errorMessage('Minimum 6 characters is required');
+        displayErrorMessage(err);
     }
     render();
 }
@@ -131,32 +126,65 @@ function getEditedTitle() {
 }
 
 function saveEditedTitle(editedTitle, titleFromArr) {
-    const removeModal = document.getElementById('modal');
-    let test = getErrorMessage(editedTitle);
-    if (!test) {
+    const modal = document.getElementById('modal');
+    // const errorMessageElement = document.createElement('div');
+    // const modalErr = document.getElementById('isModalErr');
+
+    let err = getErrorMessage(editedTitle);
+    // errorMessageElement.textContent = err;
+    if (!err) {
         state.list.map(el => {
             if (el.title === titleFromArr) {
                 el.title = editedTitle;
                 el.status = 'Edited - ';
                 el.created_at = getTodaysDate();
-                removeModal.remove();
+                modal.remove();
             }
         })
         render();
     } else {
-        console.log(test);
+        displayErrorMessage(err);
     }
+}
 
-    // susikrauti i viena atyskira funkcija
+function displayErrorMessage(err) {
+    const appBody = document.getElementById('app-body');
+    const errorMessageBox = document.createElement('div');
+
+    // errorMessageBox.classList.add('position-absolute');
+
+
+    if (err) {
+        setTimeout( () => {
+            appBodyAppendsErrorMessageBoxAndAnimates(appBody, errorMessageBox, err)
+        }, 2000);
+    }
+}
+
+function appBodyAppendsErrorMessageBoxAndAnimates(appBody, errBox, err) {
+    errBox.classList.add('position-absolute', 'animate-err-message-fade-in');
+    errBox.innerHTML = `
+        <div class="error-message">${err}</div>
+    `
+    appBody.appendChild(errBox);
+    if (errBox.classList.contains('animate-err-message-fade-in')) {
+        setTimeout(() => {
+            errBox.classList.add('animate-err-message-fade-out');
+            setTimeout(() => {
+                errBox.remove();
+            }, 1000);
+        }, 4000)
+        ;
+    }
 }
 
 function getErrorMessage(editedTitle) {
     if (!editedTitle) {
-        return 'asdf';
+        return 'Input field must be filled';
     } else if (editedTitle.length < 6) {
-        return 'asdf';
+        return 'Title must have minimum 6 characters';
     } else if (state.list.find(el => el.title === editedTitle)) {
-        return 'asdf';
+        return `This title already exists in your todo's list`;
     }
     return '';
 }
@@ -176,11 +204,10 @@ function editTitle(title) {
 
     modalElement.innerHTML = `
         <div class="position-absolute modal-container" id="modal">
-            <div class="modal" id="modalContent">
+            <div class="modal">
                 <div class="modal-title">EDIT YOUR TODO</div>
-                <div class="modal-current-todo">
+                <div class="modal-current-todo" id="isModalErr">
                     <input type="text" id="editInput" class="mb-5 modal-input" placeholder="${title}">
-                    Your current todo
                 </div>
                 <button class="btn" id="saveEditedVal" onclick="getEditedTitle()">Save</button>
             </div>
