@@ -243,6 +243,37 @@ function checkmark(obj) {
     render();
 }
 
+function generateToolsMenu() {
+    const body = document.getElementById('app-body');
+    const searchBox = document.createElement('div');
+    const filterByStatus = document.createElement('div');
+    const searchInput = document.createElement('input');
+    const toolsMenu = document.createElement('div');
+    const searchIcon = document.createElement('span');
+    const stringSearch = document.createElement('span');
+
+    stringSearch.textContent = ' SEARCH';
+    stringSearch.classList.add('text-search');
+
+    searchIcon.classList.add('fas', 'fa-search', 'search-icon');
+    searchIcon.appendChild(stringSearch);
+
+    searchBox.classList.add('position-relative', 'search-box');
+    searchBox.appendChild(searchInput);
+    searchBox.appendChild(searchIcon);
+
+    searchInput.classList.add('search-input');
+
+    filterByStatus.textContent = 'FILTER BY STATUS';
+    filterByStatus.classList.add('btn', 'btn-filter');
+
+    toolsMenu.id = 'tools';
+    toolsMenu.appendChild(searchBox);
+    toolsMenu.appendChild(filterByStatus);
+    toolsMenu.classList.add('tools-menu');
+
+    body.insertBefore(toolsMenu, body.children[1]);
+}
 
 function generateList(div, list) {
     list.forEach((el, divItemIndex) => {
@@ -260,6 +291,7 @@ function generateList(div, list) {
 
 function render() {
     const todos = document.getElementById('todos');
+    const body = document.getElementById('app-body');
     const todoList = todos.firstElementChild;
 
     if (todoList) {
@@ -270,6 +302,13 @@ function render() {
     newTodoListElement.classList.add('d-flex', 'w-100', 'f-col', 'todos-list')
     todos.appendChild(newTodoListElement);
     generateList(newTodoListElement, state.list);
+
+    body.children.length < 3 ? generateToolsMenu() : '';
+
+    if (state.list.length === 0) {
+        const toolsMenu = document.getElementById('tools')
+        toolsMenu.remove();
+    }
 
     const addNewTodoBtn = document.getElementById('add-element');
     addNewTodoBtn.onclick = () => addNewTodoItem(getValueFromInput());
