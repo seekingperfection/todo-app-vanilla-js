@@ -46,14 +46,15 @@ function addNewTodoItem(value) {
     // const err = document.getElementById('error-msg');
     let err = getErrorMessage(value);
     if (!err) {
-        state.list.push(
-            {   title: value,
+        state.list.unshift(
+      {   title: value,
                 isDone: false,
                 created_at: getTodaysDate(),
                 status: 'Created - ',
                 icon_checkmark: {
                     icon_classes_arr: ['fas','fa-check','pointer','mr-10'],
-                }
+                },
+                display: ['default']
             }
             );
         // if (err) {
@@ -71,7 +72,9 @@ function getTodaysDate() {
     return today.toLocaleString();
 }
 
-function appendListItem(div, title, remove, edit, checkmark, date, status, iconCheckmarkClassesArr) {
+
+// TODO removeChild instead of sort on filter/remove display property from state.list and use of it for sure
+function appendListItem(div, title, remove, edit, checkmark, date, status, iconCheckmarkClassesArr, display) {
     const todo = document.createElement('div');
     const iconRemove = document.createElement('i');
     const iconEdit = document.createElement('i');
@@ -104,6 +107,10 @@ function appendListItem(div, title, remove, edit, checkmark, date, status, iconC
     iconBox.appendChild(iconRemove);
 
     todo.classList.add('todo', 'position-relative', 'w-100', 'd-flex', 'f-a-center', 'f-j-between');
+    display.forEach(el => {
+        todo.classList.add(el);
+    })
+
     todo.textContent = title;
 
     todo.appendChild(createdAt);
@@ -246,7 +253,7 @@ function checkmark(obj) {
 function generateToolsMenu() {
     const body = document.getElementById('app-body');
     const searchBox = document.createElement('div');
-    const filterByStatus = document.createElement('div');
+    const sortByStatus = document.createElement('div');
     const searchInput = document.createElement('input');
     const toolsMenu = document.createElement('div');
     const searchIcon = document.createElement('span');
@@ -264,15 +271,36 @@ function generateToolsMenu() {
 
     searchInput.classList.add('search-input');
 
-    filterByStatus.textContent = 'FILTER BY STATUS';
-    filterByStatus.classList.add('btn', 'btn-filter');
+    sortByStatus.textContent = 'FILTER BY STATUS';
+    sortByStatus.classList.add('btn', 'btn-filter');
+    sortByStatus.addEventListener('click', function() {
+        sortTodosByStatusIsDone();
+    })
 
     toolsMenu.id = 'tools';
     toolsMenu.appendChild(searchBox);
-    toolsMenu.appendChild(filterByStatus);
+    toolsMenu.appendChild(sortByStatus);
     toolsMenu.classList.add('tools-menu');
 
     body.insertBefore(toolsMenu, body.children[1]);
+}
+
+function sortTodosByStatusIsDone() {
+    // state.list.filter(el => {
+    //     if (!el.isDone) {
+    //         el.display.push('filtered');
+    //     }
+    // });
+    // render();
+    // state.list.sort(a,b => {
+    //     console.log(a,b)
+    // })
+//    pameginti sort();
+    state.list.sort((a,b) => {
+        return b.isDone - a.isDone;
+    });
+    render();
+    // console.log(state.list)
 }
 
 function generateList(div, list) {
@@ -285,7 +313,8 @@ function generateList(div, list) {
             () => checkmark(el, divItemIndex),
             el.created_at,
             el.status,
-            el.icon_checkmark)
+            el.icon_checkmark,
+            el.display)
     })
 }
 
@@ -293,14 +322,18 @@ function render() {
     const todos = document.getElementById('todos');
     const body = document.getElementById('app-body');
     const todoList = todos.firstElementChild;
+    const newTodoListElement = document.createElement('div');
+    const addNewTodoBtn = document.getElementById('add-element');
+    const defaultMsg = document.getElementById('default-msg');
 
     if (todoList) {
         todoList.remove();
     }
 
-    const newTodoListElement = document.createElement('div');
     newTodoListElement.classList.add('d-flex', 'w-100', 'f-col', 'todos-list')
+
     todos.appendChild(newTodoListElement);
+
     generateList(newTodoListElement, state.list);
 
     body.children.length < 3 ? generateToolsMenu() : '';
@@ -310,10 +343,8 @@ function render() {
         toolsMenu.remove();
     }
 
-    const addNewTodoBtn = document.getElementById('add-element');
     addNewTodoBtn.onclick = () => addNewTodoItem(getValueFromInput());
 
-    const defaultMsg = document.getElementById('default-msg');
     if ( state.list.length === 0 ) {
         defaultMessage(`Currently there aren't any todos`);
     } else if (defaultMsg) {
